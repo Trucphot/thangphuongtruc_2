@@ -1,0 +1,154 @@
+<?php
+session_start();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+require_once("settings.php");
+$conn = @mysqli_connect($host, $user, $pwd, $sql_db);
+if (!$conn) {
+    die(<p>Connection failed, please try again later.</p>);
+}
+$errors = [];
+$table_check_query = "SHOW TABLES LIKE 'eoi'";
+$table_result = mysqli_query($conn, $table_check_query);
+if (mysqli_num_rows($table_result) == 0) {
+    $create_table_sql = "
+        CREATE TABLE eoi (
+          EOInumber INT AUTO_INCREMENT PRIMARY KEY,
+          JobReferenceNumber VARCHAR(10) NOT NULL,
+          FirstName VARCHAR(20) NOT NULL,
+          LastName VARCHAR(20) NOT NULL,
+          StreetAddress VARCHAR(40) NOT NULL,
+          SuburbTown VARCHAR(40) NOT NULL,
+          State CHAR(3) NOT NULL,
+          Postcode CHAR(4) NOT NULL,
+          EmailAddress VARCHAR(255) NOT NULL,
+          PhoneNumber VARCHAR(12) NOT NULL,
+          skill1 BOOLEAN,
+          skill2 BOOLEAN,
+          skill3 BOOLEAN,
+          OtherSkills TEXT,
+          Status ENUM('New', 'Current', 'Final') NOT NULL DEFAULT 'New'
+        )
+    ";
+    if (!mysqli_query($conn, $create_table_sql)) {
+        die("<p>Error creating table: " . mysqli_error($conn) . "</p>");
+    }
+}
+function sanitize_input($conn, $data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+$job_ref    = sanitize_input($conn, $_POST['job_reference_number']);
+$first_name = sanitize_input($conn, $_POST['first_name']);
+$last_name  = sanitize_input($conn, $_POST['last_name']);
+$street     = sanitize_input($conn, $_POST['street_address']);
+$suburb     = sanitize_input($conn, $_POST['suburb_town']);
+$state      = sanitize_input($conn, $_POST['state']);
+$postcode   = sanitize_input($conn, $_POST['postcode']);
+$email      = sanitize_input($conn, $_POST['email']);
+$phone      = sanitize_input($conn, $_POST['phone']);
+$skill1   = isset($_POST['skill_php']) ? 1 : 0;
+$skill2   = isset($_POST['skill_js']) ? 1 : 0;
+$skill3 = isset($_POST['skill_mysql']) ? 1 : 0;
+$other_skills_checkbox = isset($_POST['other_skills_checkbox']);
+$other_skills_text     = sanitize_input($conn, $_POST['other_skills_text']);
+//Required field validation
+if (empty($first_name)) {
+    $errors[] = "First name is required.";
+}
+if (empty($last_name)) {
+    $errors[] = "Last name is required.";
+}
+if (empty($street)) {
+    $errors[] = "Street address is required.";
+}
+if (empty($suburb)) {
+    $errors[] = "Suburb/town is required.";
+}
+if (empty($email)) {
+    $errors[] = "Email is required.";
+}
+if (empty($phone)) {
+    $errors[] = "Phone number is required.";
+}
+if (empty($state)) {
+    $errors[] = "State is required.";
+}
+if (empty($postcode)) {
+    $errors[] = "Postcode is required.";
+}
+//Format validation
+if (!empty($first_name) && !preg_match("/^[a-zA-Z]{1,20}$/", $first_name)) {
+        $errors[] = "First name must be max 20 alpha characters.";
+    }
+if (!empty($last_name) && !preg_match("/^[a-zA-Z]{1,20}$/", $last_name)) {
+        $errors[] = "Last name must be max 20 alpha characters.";
+    }
+if (!preg_match("/^\d{4}$/", $postcode)) {
+        $errors[] = "Postcode must be exactly 4 digits.";
+    }
+$valid_states = ['VIC', 'NSW', 'QLD', 'NT', 'WA', 'SA', 'TAS', 'ACT'];
+    if (!in_array($state, $valid_states)) {
+        $errors[] = "State is not valid. Must be one of: " . implode(', ', $valid_states);
+    }
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Email address format is not valid.";
+    }
+if (!preg_match("/^[\d\s]{8,12}$/", $phone)) {
+        $errors[] = "Phone number must be 8 to 12 digits (or spaces).";
+    }
+if (isset($_POST['other_skills_checkbox']) && empty($other_skills)) {
+        $errors[] = "Other skills text cannot be empty if the checkbox is selected.";
+    }
+//Processing validation results
+if (!empty($errors)) {
+    $_SESSION['errors'] = $errors;
+    $_SESSION['form_data'] = $_POST;
+    echo "<h1>An error occurred while submitting the application.</h1>";
+    echo "<p>Please correct the following errors and try again:</p>";
+    echo "<ul>";
+        foreach ($errors as $error) {
+            echo "<li>$error</li>";
+        }
+        echo "</ul>";
+        echo "<p><a href='apply.php'>Back to application page</a></p>";
+    } else {
+        $sql = "INSERT INTO eoi (JobReferenceNumber, FirstName, LastName, StreetAddress, SuburbTown, State, Postcode, EmailAddress, PhoneNumber, skill_php, skill_js, OtherSkills) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "sssssssssiis", 
+        $job_ref, 
+        $first_name, 
+        $last_name, 
+        $street_address,
+        $suburb,
+        $state, 
+        $postcode, 
+        $email, 
+        $phone,
+        $skill_php,
+        $skill_js,
+        $other_skills
+    );
+    if (mysqli_stmt_execute($stmt)) {
+        $eoi_number = mysqli_insert_id($conn);        
+        echo "<h1>Thanks for applying!</h1>";
+        echo "<p>Your application has been received.</p>";
+        echo "<p>Your EOI number is: <strong>$eoi_number</strong></p>";
+        echo "<p><a href='index.php'>Return to home page</a></p>";
+        
+    } else {
+        echo "<h1>System error</h1>";
+        echo "<p>Your application could not be saved. Please try again later.</p>";
+    }
+    mysqli_stmt_close($stmt);
+}
+mysqli_close($conn);
+} else {
+    header("Location: index.php")
+    exit();
+}
+?>  
+        
