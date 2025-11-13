@@ -1,0 +1,107 @@
+body {
+  background-image: url('../images/background.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center; 
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+}
+
+h3 {
+  color: #00b4d8;
+  text-align: center;         
+  font-size: 2.5em;            
+  margin-bottom: 50px;
+  text-shadow: 2px 2px 8px rgba(53, 77, 153, 0.5);
+  letter-spacing: 1px;
+  transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+  cursor: default;
+}
+
+h3:hover {
+  color: #0077b6;
+  transform: scale(1.05);
+  text-shadow: 2px 2px 12px rgba(0, 180, 216, 0.7);
+}
+
+section {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 3px solid #b3e5fc;
+  border-radius: 15px;
+  padding: 25px;
+  width: 80%;
+  max-width: 900px;
+    margin: 20px auto; 
+  margin-bottom: 40px;
+  box-shadow: 0 4px 12px rgba(179, 229, 252, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+section::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.1), rgba(0,180,216,0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 15px;
+  pointer-events: none;
+}
+
+section:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0,180,216,0.5);
+}
+
+section:hover::before {
+  opacity: 1;
+}
+
+section h2 {
+  color: #0a3775;
+  border-bottom: 2px solid #0a3775;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+section p, section li {
+  color: #0d1117;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+section code, section pre {
+  background-color: #eee;
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-family: monospace;
+  font-size: 0.95em;
+  display: block;
+  overflow-x: auto;
+  margin-bottom: 10px;
+}
+
+section a {
+  color: #0077b6;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+section a:hover {
+  color: #00aaff;
+}
+
+@media (max-width: 768px) {
+  section {
+    width: 95%;
+    padding: 20px;
+  }
+  section h2 {
+    font-size: 1.3em;
+  }
+}

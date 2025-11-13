@@ -1,0 +1,110 @@
+body {
+  background-image: url('../images/background.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #0d1117;
+}
+
+h1 {
+  color: #00b4d8;
+  text-shadow: 1px 1px 6px rgba(53, 77, 153, 0.4);
+  font-size: 2.2em;
+  margin-top: 40px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+a { color: #0077b6; font-weight: bold; text-decoration: none; }
+a:hover { color: #00aaff; }
+
+.manage-container {
+  width: 85%;
+  max-width: 1000px;
+  border: 3px solid #b3e5fc;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  padding: 30px;
+  margin: 30px 0 60px;
+  box-shadow: 0 4px 12px rgba(179, 229, 252, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.manage-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(179, 229, 252, 0.6);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+form {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 2px solid #b3e5fc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 10px rgba(179, 229, 252, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+form:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(179, 229, 252, 0.5);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+label { font-weight: bold; color: #0a3775; }
+
+input[type=text] {
+  padding: 8px;
+  margin: 8px;
+  border-radius: 6px;
+  border: 1px solid #b3e5fc;
+  outline: none;
+  width: 200px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type=text]:focus {
+  border-color: #0a3775;
+  box-shadow: 0 0 8px rgba(10, 55, 117, 0.3);
+}
+
+input[type=submit] {
+  background-color: #0a3775;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+input[type=submit]:hover { 
+  background-color: #0f4ea6; 
+  transform: scale(1.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+table:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(179, 229, 252, 0.5);
+}
+
+th, td { border: 1px solid #b3e5fc; padding: 10px; text-align: left; }
+th { background-color: #0a3775; color: white; font-size: 1em; }
+tr:nth-child(even) { background-color: rgba(179, 229, 252, 0.2); }
+tr:hover { background-color: rgba(179, 229, 252, 0.4); }
