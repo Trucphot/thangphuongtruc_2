@@ -20,27 +20,26 @@ session_start();
 
     <!-- Main Section -->
   <main>
-    <?php // Display error messages if any
-    $errors = [];
-    if (isset($_SESSION['errors'])) {
-        $errors = $_SESSION['errors'];
-        unset($_SESSION['errors']);
-      }
-    ?>
     <?php
-    if (!empty($errors)) {
+    if (!empty($errors)) { 
+?>
     <div class="error-messages">
         <p>Please correct the following errors:</p>
         <ul>
-            <?php foreach ($errors as $error) {
+            <?php 
+            foreach ($errors as $error) {
+            ?>
                 <li><?php echo $error; ?></li>
-            }
+            <?php 
+            } 
+            ?>
         </ul>
     </div>
-    } // End
+<?php 
+} 
+?>
     <div class="container">        
     <h2>Aplication Form</h2>
-     
     <form id="applicationForm" action="process_eoi.php" method="post" novalidate="novalidate">
       <fieldset class="personal-details">
         <h3>Personal Details</h3>    
@@ -133,15 +132,15 @@ session_start();
         <fieldset>
           <legend>Required technical list:</legend>
           <div class="checkbox-group">
-                <input type="checkbox" id="skill_html" name="skills[]" value="HTML">
+                <input type="checkbox" id="skill_html" name="skills_html" value="HTML">
                 <label for="skill_html">HTML</label>
             </div>
             <div class="checkbox-group">
-                <input type="checkbox" id="skill_css" name="skills[]" value="CSS">
+                <input type="checkbox" id="skill_css" name="skill_css" value="CSS">
                 <label for="skill_css">CSS</label>
             </div>
              <div class="checkbox-group">
-                <input type="checkbox" id="skill_js" name="skills[]" value="JavaScript">
+                <input type="checkbox" id="skill_js" name="skill_js" value="JavaScript">
                 <label for="skill_js">JavaScript</label>
             </div>
         </fieldset>

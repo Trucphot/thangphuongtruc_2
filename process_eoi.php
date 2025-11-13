@@ -4,7 +4,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 require_once("settings.php");
 $conn = @mysqli_connect($host, $user, $pwd, $sql_db);
 if (!$conn) {
-    die(<p>Connection failed, please try again later.</p>);
+    die("<p>Connection failed, please try again later.</p>");
 }
 $errors = [];
 $table_check_query = "SHOW TABLES LIKE 'eoi'";
@@ -39,20 +39,19 @@ function sanitize_input($conn, $data) {
     $data = htmlspecialchars($data);
     return $data;
 }
-$job_ref    = sanitize_input($conn, $_POST['job_reference_number']);
-$first_name = sanitize_input($conn, $_POST['first_name']);
-$last_name  = sanitize_input($conn, $_POST['last_name']);
+$job_ref    = sanitize_input($conn, $_POST['jobref']);
+$first_name = sanitize_input($conn, $_POST['firstname']);
+$last_name  = sanitize_input($conn, $_POST['lastname']);
 $street     = sanitize_input($conn, $_POST['street_address']);
-$suburb     = sanitize_input($conn, $_POST['suburb_town']);
+$suburb     = sanitize_input($conn, $_POST['suburb']);
 $state      = sanitize_input($conn, $_POST['state']);
 $postcode   = sanitize_input($conn, $_POST['postcode']);
 $email      = sanitize_input($conn, $_POST['email']);
 $phone      = sanitize_input($conn, $_POST['phone']);
-$skill1   = isset($_POST['skill_php']) ? 1 : 0;
-$skill2   = isset($_POST['skill_js']) ? 1 : 0;
-$skill3 = isset($_POST['skill_mysql']) ? 1 : 0;
-$other_skills_checkbox = isset($_POST['other_skills_checkbox']);
-$other_skills_text     = sanitize_input($conn, $_POST['other_skills_text']);
+$skill1   = isset($_POST['skills_html']) ? 1 : 0;
+$skill2   = isset($_POST['skill_css']) ? 1 : 0;
+$skill3 = isset($_POST['skill_js']) ? 1 : 0;
+$other_skills_text     = sanitize_input($conn, $_POST['otherskills']);
 //Required field validation
 if (empty($first_name)) {
     $errors[] = "First name is required.";
@@ -79,10 +78,10 @@ if (empty($postcode)) {
     $errors[] = "Postcode is required.";
 }
 //Format validation
-if (!empty($first_name) && !preg_match("/^[a-zA-Z]{1,20}$/", $first_name)) {
+if (!empty($first_name) && !preg_match("/^[a-zA-Z ]{1,20}$/", $first_name)) {
         $errors[] = "First name must be max 20 alpha characters.";
     }
-if (!empty($last_name) && !preg_match("/^[a-zA-Z]{1,20}$/", $last_name)) {
+if (!empty($last_name) && !preg_match("/^[a-zA-Z ]{1,20}$/", $last_name)) {
         $errors[] = "Last name must be max 20 alpha characters.";
     }
 if (!preg_match("/^\d{4}$/", $postcode)) {
@@ -98,7 +97,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 if (!preg_match("/^[\d\s]{8,12}$/", $phone)) {
         $errors[] = "Phone number must be 8 to 12 digits (or spaces).";
     }
-if (isset($_POST['other_skills_checkbox']) && empty($other_skills)) {
+if (isset($_POST['skills_html']) || isset($_POST['skills_css']) || isset($_POST['skills_js']) && empty($other_skills)) {
         $errors[] = "Other skills text cannot be empty if the checkbox is selected.";
     }
 //Processing validation results
@@ -114,7 +113,7 @@ if (!empty($errors)) {
         echo "</ul>";
         echo "<p><a href='apply.php'>Back to application page</a></p>";
     } else {
-        $sql = "INSERT INTO eoi (JobReferenceNumber, FirstName, LastName, StreetAddress, SuburbTown, State, Postcode, EmailAddress, PhoneNumber, skill_php, skill_js, OtherSkills) 
+        $sql = "INSERT INTO eoi (JobReferenceNumber, FirstName, LastName, StreetAddress, SuburbTown, State, Postcode, EmailAddress, PhoneNumber, skill1, skill2, skill3, OtherSkills) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
     $stmt = mysqli_prepare($conn, $sql);
@@ -122,15 +121,16 @@ if (!empty($errors)) {
         $job_ref, 
         $first_name, 
         $last_name, 
-        $street_address,
+        $street,
         $suburb,
         $state, 
         $postcode, 
         $email, 
         $phone,
-        $skill_php,
-        $skill_js,
-        $other_skills
+        $skill1,
+        $skill2,
+        $skill3,
+        $other_skills_text
     );
     if (mysqli_stmt_execute($stmt)) {
         $eoi_number = mysqli_insert_id($conn);        
@@ -147,7 +147,7 @@ if (!empty($errors)) {
 }
 mysqli_close($conn);
 } else {
-    header("Location: index.php")
+    header("Location: index.php");
     exit();
 }
 ?>  
