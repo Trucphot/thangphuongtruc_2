@@ -16,6 +16,8 @@ if (mysqli_num_rows($table_result) == 0) {
           JobReferenceNumber VARCHAR(10) NOT NULL,
           FirstName VARCHAR(20) NOT NULL,
           LastName VARCHAR(20) NOT NULL,
+          DateOfBirth DATE NOT NULL,
+          Gender VARCHAR(10) NOT NULL,
           StreetAddress VARCHAR(40) NOT NULL,
           SuburbTown VARCHAR(40) NOT NULL,
           State CHAR(3) NOT NULL,
@@ -42,13 +44,15 @@ function sanitize_input($conn, $data) {
 $job_ref    = sanitize_input($conn, $_POST['job_ref']);
 $first_name = sanitize_input($conn, $_POST['firstname']);
 $last_name  = sanitize_input($conn, $_POST['lastname']);
+$dob = sanitize_input($conn, $_POST['dob']);
+$gender = sanitize_input($conn, $_POST['gender']);
 $street     = sanitize_input($conn, $_POST['street_address']);
 $suburb     = sanitize_input($conn, $_POST['suburb']);
 $state      = sanitize_input($conn, $_POST['state']);
 $postcode   = sanitize_input($conn, $_POST['postcode']);
 $email      = sanitize_input($conn, $_POST['email']);
 $phone      = sanitize_input($conn, $_POST['phone']);
-$skill1   = isset($_POST['skills_html']) ? 1 : 0;
+$skill1   = isset($_POST['skill_html']) ? 1 : 0;
 $skill2   = isset($_POST['skill_css']) ? 1 : 0;
 $skill3 = isset($_POST['skill_js']) ? 1 : 0;
 $other_skills_text     = sanitize_input($conn, $_POST['otherskills']);
@@ -59,6 +63,11 @@ if (empty($first_name)) {
 if (empty($last_name)) {
     $errors[] = "Last name is required.";
 }
+ig (empty($dob)) {
+    $errors[] = "Date of birth is required.";
+}
+if (empty($gender)) {
+    $errors[] = "Gender is required.";
 if (empty($street)) {
     $errors[] = "Street address is required.";
 }
@@ -97,27 +106,21 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 if (!preg_match("/^[\d\s]{8,12}$/", $phone)) {
         $errors[] = "Phone number must be 8 to 12 digits (or spaces).";
     }
-if (isset($_POST['skills_html']) || isset($_POST['skills_css']) || isset($_POST['skills_js']) && empty($other_skills_text)) {
+if ((isset($_POST['skill_html']) || isset($_POST['skill_css']) || isset($_POST['skill_js'])) && empty($other_skills_text)) {
         $errors[] = "Other skills text cannot be empty if the checkbox is selected.";
     }
 //Processing validation results
 if (!empty($errors)) {
     $_SESSION['errors'] = $errors;
     $_SESSION['form_data'] = $_POST;
-    echo "<h1>An error occurred while submitting the application.</h1>";
-    echo "<p>Please correct the following errors and try again:</p>";
-    echo "<ul>";
-        foreach ($errors as $error) {
-            echo "<li>$error</li>";
-        }
-        echo "</ul>";
-        echo "<p><a href='apply.php'>Back to application page</a></p>";
+    header("Location: apply.php");
+    exit();
     } else {
         $sql = "INSERT INTO eoi (JobReferenceNumber, FirstName, LastName, StreetAddress, SuburbTown, State, Postcode, EmailAddress, PhoneNumber, skill1, skill2, skill3, OtherSkills) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ssssssssssiiis", 
+    mysqli_stmt_bind_param($stmt, "sssssssssssiiis", 
         $job_ref, 
         $first_name, 
         $last_name, 
