@@ -137,7 +137,7 @@ if (isset($_SESSION['errors'])) {
         <fieldset>
           <legend>Required technical list:</legend>
           <div class="checkbox-group">
-                <input type="checkbox" id="skill_html" name="skills_html" value="HTML">
+                <input type="checkbox" id="skill_html" name="skill_html" value="HTML">
                 <label for="skill_html">HTML</label>
             </div>
             <div class="checkbox-group">

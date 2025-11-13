@@ -63,11 +63,12 @@ if (empty($first_name)) {
 if (empty($last_name)) {
     $errors[] = "Last name is required.";
 }
-ig (empty($dob)) {
+if (empty($dob)) {
     $errors[] = "Date of birth is required.";
 }
 if (empty($gender)) {
     $errors[] = "Gender is required.";
+}
 if (empty($street)) {
     $errors[] = "Street address is required.";
 }
@@ -116,14 +117,16 @@ if (!empty($errors)) {
     header("Location: apply.php");
     exit();
     } else {
-        $sql = "INSERT INTO eoi (JobReferenceNumber, FirstName, LastName, StreetAddress, SuburbTown, State, Postcode, EmailAddress, PhoneNumber, skill1, skill2, skill3, OtherSkills) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO eoi (JobReferenceNumber, FirstName, LastName, DateOfBirth, Gender, StreetAddress, SuburbTown, State, Postcode, EmailAddress, PhoneNumber, skill1, skill2, skill3, OtherSkills) 
+            -- VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "sssssssssssiiis", 
         $job_ref, 
         $first_name, 
-        $last_name, 
+        $last_name,
+        $dob,
+        $gender,
         $street,
         $suburb,
         $state, 
@@ -134,7 +137,7 @@ if (!empty($errors)) {
         $skill2,
         $skill3,
         $other_skills_text
-    );
+    );    
     if (mysqli_stmt_execute($stmt)) {
         $eoi_number = mysqli_insert_id($conn);        
         echo "<h1>Thanks for applying!</h1>";
