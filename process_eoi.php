@@ -39,7 +39,7 @@ function sanitize_input($conn, $data) {
     $data = htmlspecialchars($data);
     return $data;
 }
-$job_ref    = sanitize_input($conn, $_POST['jobref']);
+$job_ref    = sanitize_input($conn, $_POST['job_ref']);
 $first_name = sanitize_input($conn, $_POST['firstname']);
 $last_name  = sanitize_input($conn, $_POST['lastname']);
 $street     = sanitize_input($conn, $_POST['street_address']);
@@ -97,7 +97,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 if (!preg_match("/^[\d\s]{8,12}$/", $phone)) {
         $errors[] = "Phone number must be 8 to 12 digits (or spaces).";
     }
-if (isset($_POST['skills_html']) || isset($_POST['skills_css']) || isset($_POST['skills_js']) && empty($other_skills)) {
+if (isset($_POST['skills_html']) || isset($_POST['skills_css']) || isset($_POST['skills_js']) && empty($other_skills_text)) {
         $errors[] = "Other skills text cannot be empty if the checkbox is selected.";
     }
 //Processing validation results
@@ -114,10 +114,10 @@ if (!empty($errors)) {
         echo "<p><a href='apply.php'>Back to application page</a></p>";
     } else {
         $sql = "INSERT INTO eoi (JobReferenceNumber, FirstName, LastName, StreetAddress, SuburbTown, State, Postcode, EmailAddress, PhoneNumber, skill1, skill2, skill3, OtherSkills) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "sssssssssiis", 
+    mysqli_stmt_bind_param($stmt, "ssssssssssiiis", 
         $job_ref, 
         $first_name, 
         $last_name, 
