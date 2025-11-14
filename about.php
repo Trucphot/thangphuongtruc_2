@@ -12,7 +12,6 @@
 </head>
 <body>
 
-  <!-- Header Include -->
   <?php include("header.inc"); ?>
 
 <main>
@@ -115,7 +114,7 @@
     </div>
     
   </main>
-  <!-- Footer Include -->
+
   <?php include("footer.inc"); ?>
 </body>
 </html>

@@ -12,7 +12,6 @@
 </head>
 <body>
 
-  <!-- Header Include -->
   <?php include("header.inc"); ?>
 
   <main>
@@ -88,7 +87,7 @@
       <img src="images/logo.png" alt="Small Logo">
     </div>
   </main>
-  <!-- Footer Include -->
+
   <?php include("footer.inc"); ?>
 </body>
 </html>

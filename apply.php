@@ -20,10 +20,8 @@ if (isset($_SESSION['errors'])) {
 </head>
 <body>
 
-  <!-- Header Include -->
   <?php include("header.inc"); ?>
 
-    <!-- Main Section -->
   <main>
     <?php
     if (!empty($errors)) { 
@@ -161,7 +159,7 @@ if (isset($_SESSION['errors'])) {
     </form>
     </div>    
   </main>   
-  <!-- Footer Include -->
+
   <?php include("footer.inc"); ?>
 </body>
 </html>

@@ -1,8 +1,6 @@
 <?php
-// login.php
 session_start();
 
-// Hardcoded credentials
 $correct_username = "thangphuongtruc";
 $correct_password = "thangphuongtruc";
 $error = "";
@@ -36,10 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-  <!-- Header -->
   <?php include("header.inc"); ?>
 
-  <!-- Main Login Container -->
   <main>
     <div class="login-container">
       <form class="login-box" method="post">
@@ -53,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
   </main>
 
-  <!-- Footer -->
   <?php include("footer.inc"); ?>
 
 </body>
