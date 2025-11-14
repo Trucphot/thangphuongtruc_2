@@ -48,10 +48,12 @@
           <img src="images/member1.jpg" alt="Member 1">
           <h3>Trịnh Hồng Nguyên Trực</h3>
           <p>Student ID: 105711705</p>
-          <p><strong>Contribution:</strong></p>
+          <p><strong>Contribution PP1:</strong></p>
+          <p>Individual Responsibility: Team Leader.</p>
           <p>Shared Responsibility: Home Page, CSS (All).</p>
           <p>Individual Responsibility: Position Description (jobs) Page.</p>
-          <p>Individual Responsibility: Team Leader.</p>
+          <p><strong>Contribution PP2:</strong></p>
+          <p>Individual Responsibility: Create table jobs in MySQL database, update JobsPhp file, make PowerPoint.</p>
           <p><strong>Contact:</strong> <a href="mailto:Tructhn.work@gmail.com">Tructhn.work@gmail.com</a></p>
         </div>
 
@@ -59,9 +61,11 @@
           <img src="images/member2.jpg" alt="Member 2">
           <h3>Nguyễn Đức Anh Thắng</h3>
           <p>Student ID: 104850283</p>
-          <p><strong>Contribution:</strong></p>
+          <p><strong>Contribution PP1:</strong></p>
           <p>Shared Responsibility: Home Page, CSS (All).</p>
           <p>Individual Responsibility: About Page.</p>
+          <p><strong>Contribution PP2:</strong></p>
+          <p>Individual Responsibility: Change the file to PHP, Management page, About Us, Enhancements page, CSS.</p>
           <p><strong>Contact:</strong> <a href="mailto:Kim2552005@gmail.com">Kim2552005@gmail.com</a></p>
         </div>
 
@@ -69,9 +73,11 @@
           <img src="images/member3.jpg" alt="Member 3">
           <h3>Dương Đức Phương</h3>
           <p>Student ID: 105714827</p>
-          <p><strong>Contribution:</strong></p>
+          <p><strong>Contribution PP1:</strong></p>
           <p>Shared Responsibility: Home Page, CSS (All)</p>
           <p>Individual Responsibility: Job Application Page.</p>
+          <p><strong>Contribution PP2:</strong></p>
+          <p>Individual Responsibility: Create EOI table, Process_eoi PHP, Enhancements page.</p>
           <p><strong>Contact:</strong> <a href="mailto:phuongeds10@gmail.com">phuongeds10@gmail.com</a></p>
         </div>
       </section>
