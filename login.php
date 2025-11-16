@@ -4,19 +4,39 @@ session_start();
 $correct_username = "thangphuongtruc";
 $correct_password = "thangphuongtruc";
 $error = "";
+// Limit the number of loggins
+$max_attempts = 3;
+$lockout_seconds = 300;
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+}
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Check if the user is locked
+if (isset($_SESSION['lockout_until']) && $_SESSION['lockout_until'] > time()) {
+  $remaining = $_SESSION['lockout_until'] - time();
+  $error = "Too many failed attempts. Please wait $remaining seconds.";
+}
+// Process logging if the user is not locked
+else if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
 
     if ($username === $correct_username && $password === $correct_password) {
+        unset($_SESSION['login_attempts']);
+        unset($_SESSION['lockout_until']);  
         $_SESSION['authenticated'] = true;
         $_SESSION['username'] = $username; 
         header("Location: manage.php");
         exit();
     } else {
+        $_SESSION['login_attempts']++;
+        if ($_SESSION['login_attempts'] >= $max_attempts) {
+        $_SESSION['lockout_until'] = time() + $lockout_seconds;
+        $error = "You attempted the wrong $max_attempts times. Locked out for $lockout_seconds seconds.";
+    } else {
         $error = "Incorrect username or password. Please try again.";
     }
+  }
 }
 ?>
 

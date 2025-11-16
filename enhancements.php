@@ -22,23 +22,19 @@ session_start();
     <h3>Enhancements Implemented</h3>
 
     <section>
-      <h2>1️⃣ Sorting EOIs by Selected Field</h2>
+      <h2>1️⃣ Sorting EOIs by Selected Field (manage.php)</h2>
       <p>
         The HR manager can now choose how to sort EOI records in <code>manage.php</code>.  
         A dropdown menu allows sorting by fields like <b>first name</b>, <b>last name</b>, <b>job reference</b>, or <b>status</b>.
       </p>
-      <ul>
-        <li>Added a <code>&lt;select&gt;</code> form element in <code>manage.php</code>.</li>
-        <li>The PHP script uses <code>ORDER BY</code> in SQL based on the selected field.</li>
-      </ul>
       <p><b>Code Example:</b></p>
-      <pre><code>$sort_field = $_POST['sort_field'] ?? 'eoi_id';
-$query = "SELECT * FROM eoi ORDER BY $sort_field ASC";
-$result = mysqli_query($conn, $query);</code></pre>
+      <pre><code>if (isset($_POST['list_all']));
+if (isset($_POST['list_by_job']));
+if (isset($_POST['list_by_name']));</code></pre>
     </section>
 
     <section>
-      <h2>2️⃣ Manager Registration Page (manager_register.php)</h2>
+      <h2>2️⃣ Manager Registration Page (login.php)</h2>
       <p>
         A secure manager registration page was created with <b>server-side validation</b>:
       </p>
@@ -46,10 +42,11 @@ $result = mysqli_query($conn, $query);</code></pre>
         <li><b>Unique username</b> — checked against existing database records.</li>
         <li><b>Password rule</b> — at least 8 characters, one number, and one uppercase letter.</li>
       </ul>
-      <p>The manager’s data (username & hashed password) is stored in a <code>managers</code> table.</p>
+      <p>The manager’s data (username & hashed password) is stored in a <code>login.php</code> table.</p>
       <p><b>Code Example:</b></p>
-      <pre><code>$hash = password_hash($password, PASSWORD_DEFAULT);
-mysqli_query($conn, "INSERT INTO managers (username, password) VALUES ('$user', '$hash')");</code></pre>
+      <pre><code>if ($username === $correct_username && $password === $correct_password);
+$_SESSION['authenticated'] = true;
+$_SESSION['username'] = $username;</code></pre>
     </section>
 
     <section>
@@ -62,8 +59,13 @@ mysqli_query($conn, "INSERT INTO managers (username, password) VALUES ('$user', 
         <li>Each protected page checks if the session exists before showing content.</li>
       </ul>
       <p><b>Code Example:</b></p>
-      <pre><code>session_start();
-if (!isset($_SESSION['username'])) {
+      <pre><code>if ($username === $correct_username && $password === $correct_password) {
+        $_SESSION['authenticated'] = true;
+        $_SESSION['username'] = $username; 
+        header("Location: manage.php");
+        exit();
+}
+if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
     header("Location: login.php");
     exit();
 }</code></pre>
@@ -75,27 +77,21 @@ if (!isset($_SESSION['username'])) {
         To increase security, the login system tracks failed login attempts. After <b>3 failed attempts</b>, the user is <b>locked out</b> for 5 minutes.
       </p>
       <ul>
-        <li>Each failed login increments an <code>attempts</code> counter.</li>
+        <li>Each failed login increments an <code>login_attempts</code> counter.</li>
         <li>If counter reaches 3, current time is recorded.</li>
         <li>The system checks if 5 minutes have passed before allowing login again.</li>
       </ul>
       <p><b>Code Example:</b></p>
-      <pre><code>if ($attempts >= 3 && time() - $last_attempt < 300) {
-    echo "Access disabled. Please try again later.";
-} else {
-    // allow login
-}</code></pre>
-    </section>
-
-    <section>
-      <h2>Summary of Enhancements</h2>
-      <ul>
-        <li>✅ Added EOI sorting feature for better data management.</li>
-        <li>✅ Added manager registration with unique username & password validation.</li>
-        <li>✅ Added login system & session-based access control.</li>
-        <li>✅ Added security lockout after 3 failed login attempts.</li>
-      </ul>
-      <p>These enhancements improve the system’s usability, organization, and security.</p>
+      <pre><code>$max_attempts = 3;
+$lockout_seconds = 300;
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+}
+$_SESSION['login_attempts']++;
+        if ($_SESSION['login_attempts'] >= $max_attempts) {
+        $_SESSION['lockout_until'] = time() + $lockout_seconds;
+        $error = "You attempted the wrong $max_attempts times. Locked out for $lockout_seconds seconds."
+        }</code></pre>
     </section>
 
   </main>
@@ -104,3 +100,4 @@ if (!isset($_SESSION['username'])) {
 
 </body>
 </html>
+ 
