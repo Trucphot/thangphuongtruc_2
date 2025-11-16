@@ -1,6 +1,7 @@
 <?php
 session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
 require_once("settings.php");
 $conn = @mysqli_connect($host, $user, $pwd, $sql_db);
 if (!$conn) {
@@ -118,27 +119,27 @@ if (!empty($errors)) {
     exit();
     } else {
         $sql = "INSERT INTO eoi (JobReferenceNumber, FirstName, LastName, DateOfBirth, Gender, StreetAddress, SuburbTown, State, Postcode, EmailAddress, PhoneNumber, skill1, skill2, skill3, OtherSkills) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "sssssssssssiiis", 
-        $job_ref, 
-        $first_name, 
-        $last_name,
-        $dob,
-        $gender,
-        $street,
-        $suburb,
-        $state, 
-        $postcode, 
-        $email, 
-        $phone,
-        $skill1,
-        $skill2,
-        $skill3,
-        $other_skills_text
-    );    
-    if (mysqli_stmt_execute($stmt)) {
+            VALUES (
+                '$job_ref', 
+                '$first_name', 
+                '$last_name',
+                '$dob',
+                '$gender',
+                '$street',
+                '$suburb',
+                '$state', 
+                '$postcode', 
+                '$email', 
+                '$phone',
+                $skill1,
+                $skill2,
+                $skill3,
+                '$other_skills_text'
+            )";
+    
+    $insert_result = mysqli_query($conn, $sql);
+
+    if ($insert_result) {
         $eoi_number = mysqli_insert_id($conn);        
         echo "<h1>Thanks for applying!</h1>";
         echo "<p>Your application has been received.</p>";
@@ -149,7 +150,6 @@ if (!empty($errors)) {
         echo "<h1>System error</h1>";
         echo "<p>Your application could not be saved. Please try again later.</p>";
     }
-    mysqli_stmt_close($stmt);
 }
 mysqli_close($conn);
 } else {
